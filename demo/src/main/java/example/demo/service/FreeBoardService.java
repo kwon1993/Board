@@ -2,6 +2,7 @@ package example.demo.service;
 
 import example.demo.domain.FreeBoard;
 import example.demo.domain.Member;
+import example.demo.dto.FreeBoardEdit;
 import example.demo.dto.FreeBoardRead;
 import example.demo.dto.FreeBoardWrite;
 import example.demo.repository.FreeBoardRepository;
@@ -63,6 +64,11 @@ public class FreeBoardService {
                 freeBoardWrite.getContent()
         );
         freeBoardRepository.saveFreeBoard(freeBoard);
-        return freeBoardRepository.findFreeBoardByName(member.getId()).getId();
+        return freeBoardRepository.findNewFreeBoardByName(member.getId()).getId();
+    }
+
+    public void editFreeBoard(FreeBoardEdit freeBoardEdit) {
+        FreeBoard freeBoard = freeBoardRepository.findFreeBoardById(freeBoardEdit.getId());
+        freeBoard.editFreeBoard(freeBoardEdit.getTitle(), freeBoardEdit.getContent());
     }
 }

@@ -1,8 +1,12 @@
 package example.demo.controller;
 
+import example.demo.dto.FreeBoardEdit;
+import example.demo.dto.FreeBoardRead;
+import example.demo.dto.FreeBoardWrite;
 import example.demo.service.FreeBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +18,14 @@ public class FreeBoardController {
     private final FreeBoardService freeBoardService;
 
     @GetMapping("/freeBoard/{page}")
-    public String freeBoardList() {
+    public String freeBoardList(int page) {
         return "/freeBoard/list";
     }
 
     @GetMapping("/freeBoard/{id}")
-    public String freeBoardRead() {
+    public String freeBoardRead(Long id, Model model) {
+        FreeBoardRead freeBoardRead = freeBoardService.readFreeBoard(id);
+        model.addAttribute(freeBoardRead);
         return "/freeBoard/read";
     }
 
@@ -29,9 +35,9 @@ public class FreeBoardController {
     }
 
     @PostMapping("/freeBoard/write")
-    public String freeBoardWrite() {
-        Long returnedPostId = 0L;
-        return "redirect:/freeBoard/" + returnedPostId;
+    public String freeBoardWrite(FreeBoardWrite freeBoardWrite) {
+        Long returnedId = freeBoardService.saveFreeBoard(freeBoardWrite);
+        return "redirect:/freeBoard/" + returnedId;
     }
 
     @GetMapping("/freeBoard/{id}/edit")
@@ -40,8 +46,9 @@ public class FreeBoardController {
     }
 
     @PostMapping("/freeBoard/{id}/edit")
-    public String freeBoardEdit(Long id) {
-        return "redirect:/freeBoard/" + id;
+    public String freeBoardEdit(FreeBoardEdit freeBoardEdit) {
+        freeBoardService.editFreeBoard(freeBoardEdit);
+        return "redirect:/freeBoard/" + freeBoardEdit.getId();
     }
 
     @DeleteMapping("/freeBoard/{id}/delete")

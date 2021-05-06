@@ -38,7 +38,9 @@ public class FreeBoard {
         this.replyCount = 0;
     }
 
-    public void FreeBoardModified() {
+    public void editFreeBoard(String title, String content) {
+        this.title = title;
+        this.content = content;
         this.modifyDate = LocalDateTime.now();
     }
 }

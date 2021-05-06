@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class FreeBoardRepository {
+public abstract class FreeBoardRepository {
 
     private final EntityManager entityManager;
 
@@ -21,8 +21,13 @@ public class FreeBoardRepository {
         return entityManager.find(FreeBoard.class, id);
     }
 
-    public FreeBoard findFreeBoardByName(Long id) {
-        return null;
+    public FreeBoard findNewFreeBoardByName(Long id) {
+        String query = "select f from FreeBoard f where f.writer = :writer order by f.id desc";
+        return entityManager.createQuery(query, FreeBoard.class)
+                .setParameter("writer", id)
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getSingleResult();
     }
 
     public void saveFreeBoard(FreeBoard freeBoard) {
